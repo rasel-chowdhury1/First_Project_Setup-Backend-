@@ -1,5 +1,5 @@
 
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 // 1. Create an interface representing a document in MongoDB.
 export type Guardian = {
@@ -26,7 +26,7 @@ export type LocalGuardian = {
 
 export type Student = {
   id: string;
-  password: string;
+  user: Types.ObjectId;
   name: UserName;
   gender: 'male' | 'female';
   dateOfBirth?: string;
@@ -39,7 +39,7 @@ export type Student = {
   guardian: Guardian;
   localGuardian: LocalGuardian;
   profileImg?: string;
-  isActive: 'active' | 'inActive';
+  admissionSemister: Types.ObjectId;
   isDeleted: boolean
 };
 

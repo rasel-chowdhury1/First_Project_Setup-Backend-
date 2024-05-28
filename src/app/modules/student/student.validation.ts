@@ -69,13 +69,13 @@ const localGuardianValidationSchema = Joi.object({
 });
 
 // Joi schema for Student
-const studentValidationSchema = Joi.object({
-  id: Joi.string().max(20).required().messages({
-    'any.required': 'Student ID is required',
-  }),
-  password: Joi.string().required().messages({
-    'any.required': 'password is required',
-  }),
+const CreateStudentValidationSchema = Joi.object({
+  // id: Joi.string().max(20).required().messages({
+  //   'any.required': 'Student ID is required',
+  // }),
+  // password: Joi.string().required().messages({
+  //   'any.required': 'password is required',
+  // }),
   name: userNameValidationSchema.required().messages({
     'any.required': 'Name is required',
   }),
@@ -113,14 +113,17 @@ const studentValidationSchema = Joi.object({
     'any.required': 'Guardian information is required',
   }),
   localGuardian: localGuardianValidationSchema.optional(),
+  admissionSemister: Joi.string(),
   profileImg: Joi.string().optional(),
-  isActive: Joi.string()
-    .valid('active', 'inactive')
-    .default('active')
-    .messages({
-      'any.only': '{#label} must be one of [active, inactive]',
-    }),
-    isDeleted: Joi.boolean()
+  // isActive: Joi.string()
+  //   .valid('active', 'inactive')
+  //   .default('active')
+  //   .messages({
+  //     'any.only': '{#label} must be one of [active, inactive]',
+  //   }),
+  //   isDeleted: Joi.boolean()
 });
 
-export default studentValidationSchema;
+export const studentValidations = {
+  CreateStudentValidationSchema,
+};

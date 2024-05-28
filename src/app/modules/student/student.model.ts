@@ -137,8 +137,17 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 
 //const studentSchema = new Schema<Student, TStudentModel, StudentMethods>//it is instance method
 const studentSchema = new Schema<Student, TStudentModel>({
-  id: { type: String, required: [true, "Student ID is required"], unique: true },
-  password: { type: String, required: [true, "password is required"],maxlength:[20, "Password can not be more than 20 characters."]},
+  id: { 
+    type: String, 
+    required: [true, "Student ID is required"], 
+    unique: true 
+  },
+  user: {
+    type: Schema.Types.ObjectId, 
+    required: [true, "User object id is required."],
+    unique: true,
+    ref: 'User'
+  },
   name: {
     type: userNameSchema,
     required: [true, "Name is required"]
@@ -170,10 +179,11 @@ const studentSchema = new Schema<Student, TStudentModel>({
   },
   localGuardian: localGuardianSchema,
   profileImg: { type: String },
-  isActive: {
-    type: String,
-    enum: ['active', 'inactive'],
-    default: 'active'
+  admissionSemister: {
+    type: Schema.Types.ObjectId,
+    required: [true, "User object id is required."],
+    unique: true,
+    ref: 'AcademicSemister'
   },
   isDeleted: {
     type: Boolean,
@@ -199,13 +209,13 @@ studentSchema.pre('save', async function(next){
   
   const user = this;
   //hashing password and save into db
-  user.password = await bcrypt.hash(user.password, Number(config.bcrypt_sold_rounds) )
+  // user.password = await bcrypt.hash(user.password, Number(config.bcrypt_sold_rounds) )
   next()
 })
 
 // post save middelware/hook : worked on create() save()
 studentSchema.post('save', function(doc, next){
-  doc.password = ''
+  // doc.password = ''
   console.log('post hook we saved data -> ', this)
   next()
 })
