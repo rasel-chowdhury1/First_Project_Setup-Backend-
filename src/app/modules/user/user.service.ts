@@ -1,8 +1,11 @@
 import config from "../../config";
+import { academicSemisterNameCodeMappper } from "../academicSemister/academicSemister.constant";
+import { AcademicSemisterModel } from "../academicSemister/academicSemister.model";
 import { Student } from "../student/student.interface";
 import { StudentModel } from "../student/student.model";
 import { TnewUser, Tuser } from "./user.interface";
 import { UserModel } from "./user.model";
+import { generateStudentId } from "./user.utils";
 
 const createStudentIntoDB = async (password: string, studentData: Student) => {
 
@@ -22,9 +25,13 @@ const createStudentIntoDB = async (password: string, studentData: Student) => {
 
     //set student role
     userData.role = 'student';
+
+    //find academic semester id
+    const admissionSemisterData = await AcademicSemisterModel.findById(studentData.admissionSemister)
+
     
-    //set manually generated id
-    userData.id = '203010001'
+    //set generated id
+    userData.id = await generateStudentId(admissionSemisterData);
 
     console.log({userData})
 

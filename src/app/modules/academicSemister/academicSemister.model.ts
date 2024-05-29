@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import TacademicSemister, { Tmonths } from "./academicSemister.interface";
+import { TacademicSemister, Tmonths } from "./academicSemister.interface";
 
 export const Months: Tmonths[] = ['January' , 'February' , 'March' , 'April' , 'May' , 'June' , 'July' , 'August' , 'September' , 'October' , 'November','December'];
 

@@ -7,7 +7,8 @@ import bcrypt from 'bcrypt';
 const userSchema = new Schema<Tuser>({
     id: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
