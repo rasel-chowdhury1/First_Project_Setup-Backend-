@@ -1,6 +1,8 @@
 import { academicSemisterNameCodeMappper } from "./academicSemister.constant";
-import TacademicSemister from "./academicSemister.interface";
+import { TacademicSemister } from "./academicSemister.interface";
 import { AcademicSemisterModel } from "./academicSemister.model";
+
+
 
 const createAcademicSemisterIntoDB = async (data: TacademicSemister) => {
     
@@ -25,10 +27,13 @@ const getSingleAcademicSemisterFromDB = async (semisterId: string) => {
     return result;
 }
 
-const updateAcademicSemisterIntoDB = async (semisterId: string, updateData: object) => {
+const updateAcademicSemisterIntoDB = async (semisterId: string, updateData: Partial<TacademicSemister>) => {
     const filter = {_id: semisterId};
-
-    const result = await AcademicSemisterModel.findOneAndUpdate(filter, updateData);
+    
+    if(updateData.name && updateData.code && academicSemisterNameCodeMappper[updateData.name] !== updateData.code){
+        throw new Error("Invalid Semister Code!")
+    }
+    const result = await AcademicSemisterModel.findOneAndUpdate(filter, updateData, {new:true});
     return result;
 }
 

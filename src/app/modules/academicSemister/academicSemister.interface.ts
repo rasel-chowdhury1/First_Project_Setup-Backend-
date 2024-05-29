@@ -26,5 +26,3 @@ export type TacademicSemisterNameCodeMappper = {
    };
 
 
-
-export default TacademicSemister;
