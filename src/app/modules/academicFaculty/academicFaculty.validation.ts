@@ -9,6 +9,11 @@ const createAcademicFacultyValidationSchema = Joi.object({
              })
 })
 
-export const academicFacultyValidationSchema = {
-    createAcademicFacultyValidationSchema
+const updateAcademicFacultyValidationSchema = Joi.object({
+    name: Joi.string().optional()
+})
+
+export const academicFacultyValidation = {
+    createAcademicFacultyValidationSchema,
+    updateAcademicFacultyValidationSchema
 }
