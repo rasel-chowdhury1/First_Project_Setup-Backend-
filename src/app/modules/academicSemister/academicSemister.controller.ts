@@ -32,7 +32,7 @@ const getAllAcademicSemister = catchAsync( async (req, res) => {
 
 const getSingleAcademicSemister = catchAsync( async(req, res) => {
     const {semisterId} = req.params;
-    console.log({semisterId})
+    // console.log({semisterId})
     const result = await AcademicSemisterService.getSingleAcademicSemisterFromDB(semisterId);
     
     sendResponse(res, {
