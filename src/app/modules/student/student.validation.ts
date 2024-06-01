@@ -30,6 +30,20 @@ const userNameValidationSchema = Joi.object({
     }),
 });
 
+const updateUserNameValidationSchema = Joi.object({
+  firstName: Joi.string()
+    .max(20)
+    .trim()
+    .regex(/^[A-Z][a-z]*$/)
+    .message('"firstName" must be capitalized')
+    .optional(),
+  middleName: Joi.string().optional(),
+  lastName: Joi.string()
+    .regex(/^[a-zA-Z]+$/)
+    .message('"lastName" should only contain alphabetic characters')
+    .optional()
+});
+
 // Joi schema for Guardian
 const guardianValidationSchema = Joi.object({
   fatherName: Joi.string().required().messages({
@@ -52,6 +66,15 @@ const guardianValidationSchema = Joi.object({
   }),
 });
 
+const updateGuardianValidationSchema = Joi.object({
+  fatherName: Joi.string().optional(),
+  fatherOccupation: Joi.string().optional(),
+  fatherContactNo: Joi.string().optional(),
+  motherName: Joi.string().optional(),
+  motherOccupation: Joi.string().optional(),
+  motherContactNo: Joi.string().optional(),
+});
+
 // Joi schema for LocalGuardian
 const localGuardianValidationSchema = Joi.object({
   name: Joi.string().required().messages({
@@ -66,6 +89,13 @@ const localGuardianValidationSchema = Joi.object({
   address: Joi.string().required().messages({
     'any.required': "Local guardian's address is required",
   }),
+});
+
+const updateLocalGuardianValidationSchema = Joi.object({
+  name: Joi.string().optional(),
+  occupation: Joi.string().optional(),
+  contactNo: Joi.string().optional(),
+  address: Joi.string().optional(),
 });
 
 // Joi schema for Student
@@ -113,6 +143,7 @@ const CreateStudentValidationSchema = Joi.object({
     'any.required': 'Guardian information is required',
   }),
   localGuardian: localGuardianValidationSchema.optional(),
+  academicDepartment: Joi.string(),
   admissionSemister: Joi.string(),
   profileImg: Joi.string().optional(),
   // isActive: Joi.string()
@@ -124,6 +155,32 @@ const CreateStudentValidationSchema = Joi.object({
   //   isDeleted: Joi.boolean()
 });
 
+// Joi schema for Student
+const UpdateStudentValidationSchema = Joi.object({
+  name: userNameValidationSchema.optional(),
+  gender: Joi.string()
+    .valid('male', 'female', 'other')
+    .optional(),
+  dateOfBirth: Joi.date().iso().optional(),
+  email: Joi.string().email().optional(),
+  contactNo: Joi.string().optional(),
+  emergencyContactNo: Joi.string().optional(),
+  bloodGroup: Joi.string()
+    .valid('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-')
+    .optional()
+    .messages({
+      'any.only': '{#label} is not a valid blood group',
+    }),
+  presentAddress: Joi.string().optional(),
+  permanentAddress: Joi.string().optional(),
+  guardian: guardianValidationSchema.optional(),
+  localGuardian: localGuardianValidationSchema.optional(),
+  academicDepartment: Joi.string().optional(),
+  admissionSemister: Joi.string().optional(),
+  profileImg: Joi.string().optional(),
+});
+
 export const studentValidations = {
   CreateStudentValidationSchema,
+  UpdateStudentValidationSchema
 };

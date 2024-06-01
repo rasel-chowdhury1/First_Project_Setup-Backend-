@@ -179,9 +179,15 @@ const studentSchema = new Schema<Student, TStudentModel>({
   },
   localGuardian: localGuardianSchema,
   profileImg: { type: String },
+  academicDepartment: {
+    type: Schema.Types.ObjectId,
+    required: [true, "admissionDepartment object id is required"],
+    unique: true,
+    ref: "AcademicDepartment"
+  },
   admissionSemister: {
     type: Schema.Types.ObjectId,
-    required: [true, "User object id is required."],
+    required: [true, "admissionSemister object id is required."],
     unique: true,
     ref: 'AcademicSemister'
   },
