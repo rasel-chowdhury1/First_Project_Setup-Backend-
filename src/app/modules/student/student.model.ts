@@ -181,7 +181,7 @@ const studentSchema = new Schema<Student, TStudentModel>({
   profileImg: { type: String },
   academicDepartment: {
     type: Schema.Types.ObjectId,
-    required: [true, "admissionDepartment object id is required"],
+    required: [true, "academicDepartment object id is required"],
     unique: true,
     ref: "AcademicDepartment"
   },
@@ -211,7 +211,7 @@ studentSchema.virtual("fullName").get(function(){
 //this is document middelware
 // pre save middelware/hood : will work on create() save()
 studentSchema.pre('save', async function(next){
-  console.log('pre hook we will save data -> ',this)
+  // console.log('pre hook we will save data -> ',this)
   
   const user = this;
   //hashing password and save into db
@@ -222,7 +222,7 @@ studentSchema.pre('save', async function(next){
 // post save middelware/hook : worked on create() save()
 studentSchema.post('save', function(doc, next){
   // doc.password = ''
-  console.log('post hook we saved data -> ', this)
+  // console.log('post hook we saved data -> ', this)
   next()
 })
 

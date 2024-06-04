@@ -21,7 +21,7 @@ import { UserModel } from "./user.model";
 
 
  //year semistercode 4digits number
- export const generateStudentId = async (payload: TacademicSemister) => {
+ export const generateStudentId = async (payload: Partial<TacademicSemister>) => {
   
   let currentId = (0).toString();
 
@@ -35,10 +35,12 @@ import { UserModel } from "./user.model";
   if(lastStudentId && lastStudentYear === currentSemisterYear && lastStudentSemisterCode === currentSemisterCode){
     currentId = lastStudentId.substring(6)
   }
-
-   let incrementId = (Number(currentId)+1).toString().padStart(4, '0');
    
+   let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
+   
+   console.log({incrementId});
+
    incrementId = `${payload.year}${payload.code}${incrementId}`;
-   console.log({incrementId})
+   console.log('this data from user.utils file -> ',{incrementId})
    return incrementId;
  }

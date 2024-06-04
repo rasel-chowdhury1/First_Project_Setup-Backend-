@@ -30,9 +30,20 @@ const createStudentIntoDB = async (password: string, studentData: Student) => {
     userData.role = 'student';
 
     //find academic semester id info
-    const admissionSemisterData = await AcademicSemisterModel.findById(studentData.admissionSemister)
-
+    const admissionSemisterData = await AcademicSemisterModel.findById(studentData.admissionSemister) as object;
+    console.log('admission Semister data type check -> ',typeof admissionSemisterData)
     const session = await mongoose.startSession()
+    
+    // console.log({userData})
+    // userData.id = await generateStudentId(admissionSemisterData);
+    // const newUser = await UserModel.create(userData);
+    // studentData.id = newUser.id;
+    // studentData.user = newUser._id;
+    // const newStudent = await StudentModel.create(studentData);
+
+    // console.log({newStudent})
+
+    // return newStudent;
 
     try {
 
@@ -40,14 +51,14 @@ const createStudentIntoDB = async (password: string, studentData: Student) => {
       //set generated id
     userData.id = await generateStudentId(admissionSemisterData);
 
-    // console.log({userData})
+    console.log({userData})
 
     //create a user and function return a result (transaction-1)
     // const newUser = await UserModel.create(userData); // using built in static method of mongoose
 
     //when using transaction then pass data as array [] return array [] data otherwise pass object {} return object{}
     const newUser = await UserModel.create([userData], {session})
-    
+    console.log({newUser})
     if(!newUser.length){
       throw new AppError(httpStatus.BAD_REQUEST, "Failed to create user")
     }
@@ -58,8 +69,10 @@ const createStudentIntoDB = async (password: string, studentData: Student) => {
 
         // const newStudent = await StudentModel.create(studentData)
         //create a student using transaction-2
+        console.log({studentData})
         const newStudent = await StudentModel.create([studentData], {session})
-
+        
+        console.log({newStudent})
         if(!newStudent){
           throw new AppError(httpStatus.BAD_REQUEST, "Failed to create student.")
         }
@@ -71,7 +84,8 @@ const createStudentIntoDB = async (password: string, studentData: Student) => {
 
     } catch (error) {
       await session.abortTransaction();
-      await session.endSession()
+      await session.endSession();
+      throw new Error('Failed to create this student');
     }
 
 

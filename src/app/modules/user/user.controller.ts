@@ -15,6 +15,7 @@ const createStudent = async (req: Request, res: Response) => {
       // const result = await StudentServices.createStudentIntoDB(value);
       
       const result = await userServices.createStudentIntoDB(password, studentData);
+      
   
     //  if(error){
     //   //send response

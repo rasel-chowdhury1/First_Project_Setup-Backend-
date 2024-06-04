@@ -26,7 +26,31 @@ import httpStatus from 'http-status';
 //   return result;
 // };
 
-const getAllStudentsFromDB = async () => {
+const getAllStudentsFromDB = async (query: Record<string,unknown>) => {
+  // console.log("base query -> ", query);
+  // const queryObj = {...query};
+
+  // let searchTerm = '';
+
+  // if(query?.searchTerm){
+  //   searchTerm = query?.searchTerm as string;
+  // }
+
+  // const searchQuery = StudentModel.find({
+  //   $or: ['email','name.firstName', 'presentAddress'].map(
+  //     (field) => ({
+  //       [field]: {$regex: searchTerm, options: 'i'}
+  //     })
+  //   )
+  // })
+
+  // //filtering
+  // const excludeFileds = ['searchTerm'];
+
+  // excludeFileds.forEach((ele) => delete queryObj[ele])
+
+  // console.log({query, queryObj})
+
   const result = await StudentModel.find().populate("user").populate("admissionSemister").populate({
     path: "academicDepartment",
     populate: {
