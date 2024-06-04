@@ -20,8 +20,8 @@ const getSingleStudent  = catchAsync( async (req, res, next) => {
  
 
 const getAllStudents = catchAsync( async (req,res, next) => {
-
-    const result = await StudentServices.getAllStudentsFromDB();
+    
+    const result = await StudentServices.getAllStudentsFromDB(req.query);
 
     //send response
     res.status(200).json({

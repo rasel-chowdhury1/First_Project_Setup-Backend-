@@ -40,7 +40,7 @@ const userSchema = new Schema<Tuser>({
 //this is document middelware
 // pre save middelware/hood : will work on create() save()
 userSchema.pre('save', async function(next){
-    console.log("Pre hook will save user data", this);
+    // console.log("Pre hook will save user data", this);
 
     const user = this;
     //hashing password and save into db
@@ -51,7 +51,7 @@ userSchema.pre('save', async function(next){
 // post save middelware/hook : worked on create() save()
 userSchema.post('save', function(doc, next){
     // doc.password = ''
-    console.log('post hook we saved user data -> ', this)
+    // console.log('post hook we saved user data -> ', this)
     next()
   })
   
