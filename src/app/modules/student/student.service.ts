@@ -62,7 +62,7 @@ const getAllStudentsFromDB = async (query: Record<string,unknown>) => {
 
 const getSingleStudentFromDB = async (id: string) => {
   // console.log(id);
-  const result = await StudentModel.findOne({ id: id }).populate("user").populate("admissionSemister").populate({
+  const result = await StudentModel.findById(id).populate("user").populate("admissionSemister").populate({
     path: "academicDepartment",
     populate: {
       path: "academicFaculty"
@@ -78,8 +78,8 @@ const getSingleStudentFromDB = async (id: string) => {
 
 const updateSingleStudentIntoDB = async (id: string, updateData: Partial<Student>) => {
   
-  const result = await StudentModel.findOneAndUpdate(
-    { id: id },
+  const result = await StudentModel.findByIdAndUpdate(
+    id,
     {updateData},
     {new: true}
   )
@@ -96,14 +96,27 @@ const deleteStudentFromDB = async (id: string) => {
   try {
     session.startTransaction();
 
-    const isUserExists = await UserModel.findOne({id});
-    console.log(!isUserExists)
-    if(!isUserExists){
-      throw new Error("This user does not exits.")
+    const deleteStudent = await StudentModel.findByIdAndUpdate(
+      id,
+      {isDeleted: true},
+      {new: true, session}
+    )
+
+    if(!deleteStudent){
+      throw new AppError(httpStatus.BAD_REQUEST, "Failed to delete student operation")
     }
 
-    const deletedUser = await UserModel.findOneAndUpdate(
-      {id},
+    //get user id from deleteStudent
+    const userId = deleteStudent.user;
+
+    // const isUserExists = await UserModel.findById(userId);
+    // console.log(!isUserExists)
+    // if(!isUserExists){
+    //   throw new Error("This user does not exits.")
+    // }
+
+    const deletedUser = await UserModel.findByIdAndUpdate(
+      id,
       {isDeleted: true},
       {new: true, session}
     )
@@ -112,15 +125,7 @@ const deleteStudentFromDB = async (id: string) => {
       throw new AppError(httpStatus.BAD_REQUEST,"Failed to delete user opertion.")
     }
 
-    const deleteStudent = await StudentModel.findOneAndUpdate(
-      {id},
-      {isDeleted: true},
-      {new: true, session}
-    )
-
-    if(!deleteStudent){
-      throw new AppError(httpStatus.BAD_REQUEST, "Failed to delete student operation")
-    }
+    
 
     await session.commitTransaction();
     await session.endSession();
