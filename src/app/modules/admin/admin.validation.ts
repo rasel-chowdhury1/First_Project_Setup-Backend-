@@ -99,7 +99,7 @@ const updateLocalGuardianValidationSchema = Joi.object({
 });
 
 // Joi schema for Student
-const CreateAdminValidationSchema = Joi.object({
+const createAdminValidationSchema = Joi.object({
   // id: Joi.string().max(20).required().messages({
   //   'any.required': 'Student ID is required',
   // }),
@@ -151,7 +151,7 @@ const CreateAdminValidationSchema = Joi.object({
 });
 
 // Joi schema for Student
-const UpdateAdminValidationSchema = Joi.object({
+const updateAdminValidationSchema = Joi.object({
   name: userNameValidationSchema.optional(),
   gender: Joi.string()
     .valid('male', 'female', 'other')
@@ -176,6 +176,6 @@ const UpdateAdminValidationSchema = Joi.object({
 });
 
 export const adminValidations = {
-  CreateAdminValidationSchema,
-  UpdateAdminValidationSchema
+  createAdminValidationSchema,
+  updateAdminValidationSchema
 };
