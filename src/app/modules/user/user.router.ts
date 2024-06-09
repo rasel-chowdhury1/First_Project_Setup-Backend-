@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import { userController } from "./user.controller";
 import { studentValidations } from "../student/student.validation";
 import validateRequest from "../../middelwares/validRequest";
@@ -11,7 +11,7 @@ router.post('/create-student', validateRequest(studentValidations.CreateStudentV
 
 router.post(
     '/create-faculty',
-    validateRequest(createFacultyValidationSchema),
+    // validateRequest(createFacultyValidationSchema),
     userController.createFaculty,
   );
   
