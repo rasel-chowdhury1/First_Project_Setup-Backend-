@@ -8,6 +8,7 @@ import { FacultyRoutes } from "../modules/faculty/faculty.router";
 import { AdminRoutes } from "../modules/admin/admin.router";
 import { CourseRoutes } from "../modules/course/course.router";
 import { SemisterRegistrationRouter } from "../modules/semisterRegistration/semisterRegistrantion.router";
+import { OfferedCourseRouter } from "../modules/offeredCourse/offeredCourse.router";
 
 const router = express.Router()
 
@@ -57,6 +58,7 @@ router.use('/academicFaculty', AcademicFacultyRouter);
 router.use('/academicDepartment', AcademicDepartmentRouter);
 router.use('/courses', CourseRoutes);
 router.use('/semister-registration', SemisterRegistrationRouter);
+router.use('/offered-course', OfferedCourseRouter);
 
 
 export default router;

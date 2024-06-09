@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 import config from "../../config";
-import { academicSemisterNameCodeMappper } from "../academicSemister/academicSemister.constant";
+// import { academicSemisterNameCodeMappper } from "../academicSemister/academicSemister.constant";
 import { AcademicSemisterModel } from "../academicSemister/academicSemister.model";
 import { Student } from "../student/student.interface";
 import { StudentModel } from "../student/student.model";
-import { TnewUser, Tuser } from "./user.interface";
+import { Tuser } from "./user.interface";
 import { UserModel } from "./user.model";
 import { generateAdminId, generateFacultyId, generateStudentId } from "./user.utils";
 import AppError from "../../errors/AppError";

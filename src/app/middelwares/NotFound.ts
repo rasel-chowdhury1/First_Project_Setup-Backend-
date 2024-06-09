@@ -1,4 +1,4 @@
-import { error } from "console";
+
 import { NextFunction, Request, Response } from "express";
 
 const NotFound = (req: Request, res: Response, next: NextFunction) => {

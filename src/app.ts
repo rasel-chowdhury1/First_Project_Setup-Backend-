@@ -1,12 +1,13 @@
 // const express = require('express')
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, { Application, Request, Response } from 'express';
 const app: Application = express();
 import cors from 'cors';
-import { StudentRouter } from './app/modules/student/student.router';
-import { UserRouter } from './app/modules/user/user.router';
+// import { StudentRouter } from './app/modules/student/student.router';
+// import { UserRouter } from './app/modules/user/user.router';
 import GlobalErrorHandler from './app/middelwares/GlobalErrorHandler';
 import NotFound from './app/middelwares/NotFound';
 import router from './app/routes';
+
 
 //parsers
 app.use(express.json());

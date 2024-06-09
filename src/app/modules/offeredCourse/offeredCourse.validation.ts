@@ -1,5 +1,5 @@
-import Joi from "joi";
-import { Days } from "./offeredCourse.interface";
+import Joi, { custom } from "joi";
+import { Days } from "./offeredCouse.interface";
 
 
 const createOfferedCourseValidationSchema = Joi.object({
@@ -8,11 +8,7 @@ const createOfferedCourseValidationSchema = Joi.object({
                              .messages({
                                 'any-required': "Semister Registration is required"
                             }),
-    academicSemister: Joi.string()
-                        .required()
-                        .messages({
-                        'any-required': "Academic semister is required"
-                    }),
+    
     academicFaculty: Joi.string()
                         .required()
                         .messages({
@@ -35,28 +31,44 @@ const createOfferedCourseValidationSchema = Joi.object({
             }),
     maxCapacity: Joi.number().required(),
     section: Joi.number().required(),
-    days: Joi.string()
-             .valid(Days),
+    days: Joi.array()
+             .items(Joi.string()
+             .valid(...Days)),
     startTime: Joi.string()
-                  .required(),
-    endTime: Joi.string()
+                .pattern(/^([01]\d|2[0-3]):([0-5]\d)$/, '24-hour time')
                 .required()
-})
+                .messages({
+                'string.pattern.base': 'The time format must be in HH:MM (24-hour) format',
+                'any.required': 'The time is required'
+                }),
+    endTime: Joi.string()
+                .pattern(/^([01]\d|2[0-3]):([0-5]\d)$/, '24-hour time')
+                .required()
+                .messages({
+                'string.pattern.base': 'The time format must be in HH:MM (24-hour) format',
+                'any.required': 'The time is required'
+                })
+}).custom((value, helpers) => {
+    if (value.startTime >= value.endTime) {
+      return helpers.message({
+        custom: 'Start Time should be before End Time'
+      });
+    }
+    return value;
+  });
 
 const updateOfferedCourseValidationSchema = Joi.object({
     faculty: Joi.string()
-                .required()
-                .messages({
-                'any-required': "Faculty is required"
-            }),
-    maxCapacity: Joi.number().required(),
-    section: Joi.number().required(),
+                .optional(),
+    maxCapacity: Joi.number().optional(),
+    section: Joi.number().optional(),
     days: Joi.string()
-             .valid(Days),
+             .valid(...Days)
+             .optional(),
     startTime: Joi.string()
-                  .required(),
+                  .optional(),
     endTime: Joi.string()
-                .required()
+                .optional()
 })
 
 export const OfferedCourseValidation = {

@@ -12,7 +12,7 @@ router.get('/:facultyId', AcademicFacultyController.getSingleAcademicFaculty)
 
 router.post(
     '/create-academic-faculty', 
-    validateRequest(academicFacultyValidation.createAcademicFacultyValidationSchema),
+    // validateRequest(academicFacultyValidation.createAcademicFacultyValidationSchema),
     AcademicFacultyController.createAcademicFaculty
 )
 
