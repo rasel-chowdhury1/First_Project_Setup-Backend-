@@ -3,6 +3,7 @@ import catchAsync from "../../utils/catchAsync";
 import { OfferedCourseServices } from "./offeredCourse.service";
 import sendResponse from "../../utils/sendResponse";
 import httpStatus from "http-status";
+import { OfferedCourseModel } from "./offeredCourse.model";
 
 
 const createOfferedCourse = catchAsync(
@@ -47,9 +48,16 @@ const getSingleOfferedCourse = catchAsync(
     }
 )
 
+const updateOfferedCourse = catchAsync( async (req, res) => {
+    const {id} = req.params;
+
+    const result = await OfferedCourseServices.updateOfferedCourseIntoDB(id, req.body);
+})
+
 
 export const OfferedCourseControllers = {
     createOfferedCourse,
     getAllOfferedCourse,
-    getSingleOfferedCourse
+    getSingleOfferedCourse,
+    updateOfferedCourse
 }
