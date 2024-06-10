@@ -6,7 +6,10 @@ const validateRequest = (schema: any) => {
     return async (req: Request, res: Response, next: NextFunction) => {
 
         // const {student: studentData} = req.body;
+        const {admin: adminData} = req.body
         console.log(req.body)
+
+        
         //validation using joi
         const {error, value} = await schema.validate(req.body);
 
@@ -23,18 +26,18 @@ const validateRequest = (schema: any) => {
             next()
         )
 
-        try {
-            // validation check
-            //if everything allright next() ->
-            // console.log(req.body, 'req.body');
-            await schema.parseAsync({
-              body: req.body,
-            });
+        // try {
+        //     // validation check
+        //     //if everything allright next() ->
+        //     // console.log(req.body, 'req.body');
+        //     await schema.parseAsync({
+        //       body: req.body,
+        //     });
       
-            next();
-          } catch (err) {
-            next(err);
-          }
+        //     next();
+        //   } catch (err) {
+        //     next(err);
+        //   }
           
     }
 }

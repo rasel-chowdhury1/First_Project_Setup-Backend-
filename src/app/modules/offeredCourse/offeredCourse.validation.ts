@@ -58,18 +58,34 @@ const createOfferedCourseValidationSchema = Joi.object({
   });
 
 const updateOfferedCourseValidationSchema = Joi.object({
-    faculty: Joi.string()
-                .optional(),
-    maxCapacity: Joi.number().optional(),
-    section: Joi.number().optional(),
-    days: Joi.string()
-             .valid(...Days)
-             .optional(),
+    faculty: Joi.string(),
+    maxCapacity: Joi.number(),
+    section: Joi.number(),
+    days: Joi.array()
+            .items(Joi.string()
+            .valid(...Days)),
     startTime: Joi.string()
-                  .optional(),
+                  .pattern(/^([01]\d|2[0-3]):([0-5]\d)$/, '24-hour time')
+                  .required()
+                  .messages({
+                  'string.pattern.base': 'The time format must be in HH:MM (24-hour) format',
+                  'any.required': 'The time is required'
+                  }),
     endTime: Joi.string()
-                .optional()
-})
+                .pattern(/^([01]\d|2[0-3]):([0-5]\d)$/, '24-hour time')
+                .required()
+                .messages({
+                'string.pattern.base': 'The time format must be in HH:MM (24-hour) format',
+                'any.required': 'The time is required'
+                })
+}).custom((value, helpers) => {
+  if (value.startTime >= value.endTime) {
+    return helpers.message({
+      custom: 'Start Time should be before End Time'
+    });
+  }
+  return value;
+});
 
 export const OfferedCourseValidation = {
     createOfferedCourseValidationSchema,

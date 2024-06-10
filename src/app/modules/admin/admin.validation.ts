@@ -98,9 +98,9 @@ const updateLocalGuardianValidationSchema = Joi.object({
   address: Joi.string().optional(),
 });
 
-// Joi schema for Student
+// Joi schema for admin
 const createAdminValidationSchema = Joi.object({
-  // id: Joi.string().max(20).required().messages({
+    // id: Joi.string().max(20).required().messages({
   //   'any.required': 'Student ID is required',
   // }),
   // password: Joi.string().required().messages({
@@ -148,7 +148,7 @@ const createAdminValidationSchema = Joi.object({
   //     'any.only': '{#label} must be one of [active, inactive]',
   //   }),
   //   isDeleted: Joi.boolean()
-});
+  })
 
 // Joi schema for Student
 const updateAdminValidationSchema = Joi.object({

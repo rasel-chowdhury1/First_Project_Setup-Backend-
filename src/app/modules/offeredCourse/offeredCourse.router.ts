@@ -16,5 +16,9 @@ router.post("/create-offered-course",
     OfferedCourseControllers.createOfferedCourse
 )
 
+router.patch("/:id",
+    // validateRequest(OfferedCourseValidation.updateOfferedCourseValidationSchema),
+    OfferedCourseControllers.updateOfferedCourse
+)
 
 export const OfferedCourseRouter = router;

@@ -13,7 +13,7 @@ router.get('/:id', AdminControllers.getSingleAdmin);
 
 router.patch(
   '/:id',
-  validateRequest(adminValidations.UpdateAdminValidationSchema),
+  validateRequest(adminValidations.updateAdminValidationSchema),
   AdminControllers.updateAdmin,
 );
 

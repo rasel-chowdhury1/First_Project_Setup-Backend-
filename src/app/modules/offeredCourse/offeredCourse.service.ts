@@ -104,9 +104,9 @@ const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
     }
 
 
-const result = await OfferedCourseModel.create({
-    ...payload, academicSemister
-});
+    const result = await OfferedCourseModel.create({
+        ...payload, academicSemister
+    });
     return result;
 }
 
@@ -127,8 +127,67 @@ const getSingleOfferedCourseFromDB = async(id: string) => {
     return result
 }
 
+const updateOfferedCourseIntoDB = async (id: string, payload: Pick<TOfferedCourse, 'faculty' | 'days' | 'startTime' | 'endTime'>) => {
+    
+    const {faculty, days, startTime, endTime} = payload;
+
+    const isOfferedCourseExists = await OfferedCourseModel.findById(id);
+
+    if(!isOfferedCourseExists){
+        throw new AppError(httpStatus.NOT_FOUND,
+            "Offered course not found...!")
+    }
+
+    const isFacultyExists = await OfferedCourseModel.findById(faculty);
+
+    if(!isFacultyExists){
+        throw new AppError(httpStatus.NOT_FOUND, 
+            "facult not found in offered course!"
+        )
+    }
+
+
+    const semisterRegistration = isOfferedCourseExists.semisterRegistration;
+
+    const semisterRegistrationStatus = await SemisterRegistrationModel.findById(semisterRegistration);
+
+    if(semisterRegistrationStatus?.status !== "UPCOMING"){
+        throw new AppError(httpStatus.BAD_REQUEST,
+            `You can not update this offered course as it is ${semisterRegistrationStatus?.status}`
+        )
+    }
+
+    //get the schedules of the faculties
+    const assignedSchedules = await OfferedCourseModel.find({
+        semisterRegistration,
+        faculty,
+        days: {$in: days}
+    }).select("days startTime endTime")
+
+    console.log(assignedSchedules)
+
+    const newSchedule = {
+        days,
+        startTime,
+        endTime
+    };
+
+    if(hasTimeConflict(assignedSchedules, newSchedule)){
+        throw new AppError(httpStatus.CONFLICT,
+            "This faculty is not available at that time ! choose other time or day"
+        )
+    }
+
+
+
+    const result = await OfferedCourseModel.findByIdAndUpdate(id, payload, {new: true});
+
+    return result;
+}
+
 export const OfferedCourseServices = {
     createOfferedCourseIntoDB,
     getAllOfferedCourseFromDB,
-    getSingleOfferedCourseFromDB
+    getSingleOfferedCourseFromDB,
+    updateOfferedCourseIntoDB
 }
