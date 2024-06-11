@@ -6,7 +6,7 @@ import catchAsync from "../../utils/catchAsync";
 
 const createStudent = async (req: Request, res: Response) => {
     try {
-  
+      
       //recive request body data using destructure
       const {password, student: studentData} = req.body;
   
