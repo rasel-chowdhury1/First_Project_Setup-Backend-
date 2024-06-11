@@ -1,10 +1,10 @@
 import { Schema, model } from "mongoose";
-import { Tuser } from "./user.interface";
+import { TUserModel, Tuser } from "./user.interface";
 import config from "../../config";
 import bcrypt from 'bcrypt';
 
 
-const userSchema = new Schema<Tuser>({
+const userSchema = new Schema<Tuser,TUserModel>({
     id: {
         type: String,
         required: true,
@@ -12,12 +12,16 @@ const userSchema = new Schema<Tuser>({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        select: 0
     },
     needsPasswordChange: {
         type: Boolean,
         default: true
     },
+    passwordChangedAt: {
+        type: Date
+    },// this field treck when change password
     role: {
         type: String,
         enum: ['admin','student','faculty']
@@ -54,8 +58,20 @@ userSchema.post('save', function(doc, next){
     // console.log('post hook we saved user data -> ', this)
     next()
   })
+
+
+  userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
+    passwordChangedTimeStamp : Date,
+    jwtIssuedTimeStamp: number
+  ){
+    // console.log(passwordChangedTimeStamp, jwtIssuedTimeStamp)
+
+    const passChangedTimeConvertedToMiliSecond = new Date(passwordChangedTimeStamp).getTime()/1000;
+    
+    return passChangedTimeConvertedToMiliSecond > jwtIssuedTimeStamp
+  }
   
 
 
 
-export const UserModel = model<Tuser>("User", userSchema);
+export const UserModel = model<Tuser, TUserModel>("User", userSchema);
