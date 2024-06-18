@@ -19,8 +19,42 @@ const changePasswordValidationSchema = Joi.object({
            .messages({'any.required': 'new password is required'})
 })
 
+const refreshTokenValidationSchema = Joi.object({
+       cookies: Joi.object({
+         refreshToken: Joi.string()
+                          .required()
+                          .messages({
+                            "any.required": "Refresh token is required!!!"
+                          }),
+       }),
+     });
+
+const forgetPasswordValidationSchema = Joi.object({
+       id: Joi.string()
+              .required()
+              .messages({
+                     'any.required': "User id is required!!!"
+              }),
+
+})
+
+const resetPasswordValidationSchema = Joi.object({
+       id: Joi.string()
+              .required()
+              .messages({
+                     'any.required': "User id is required..."
+              }),
+       newPassword: Joi.string()
+                       .required()
+                       .messages({
+                            "any.required": "newPassword is required"
+                       })
+})
 
 export const AuthValidation = {
     loginValidationSchema,
-    changePasswordValidationSchema
+    changePasswordValidationSchema,
+    refreshTokenValidationSchema,
+    forgetPasswordValidationSchema,
+    resetPasswordValidationSchema
 }

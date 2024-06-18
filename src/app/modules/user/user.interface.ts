@@ -3,6 +3,7 @@ import { USER_ROLE } from "./user.constrant";
 
 export type Tuser = {
     id: string,
+    email: string,
     password: string,
     needsPasswordChange: boolean,
     passwordChangedAt?: Date,//this filed track when change password in auth service for change-password route

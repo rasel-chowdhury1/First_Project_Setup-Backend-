@@ -103,9 +103,11 @@ const createAdminValidationSchema = Joi.object({
     // id: Joi.string().max(20).required().messages({
   //   'any.required': 'Student ID is required',
   // }),
-  // password: Joi.string().required().messages({
-  //   'any.required': 'password is required',
-  // }),
+  password: Joi.string().required().messages({
+    'any.required': 'password is required',
+  }),
+  admin: Joi.object({
+  
   designation: Joi.string(),
   name: userNameValidationSchema.required().messages({
     'any.required': 'Name is required',
@@ -149,6 +151,8 @@ const createAdminValidationSchema = Joi.object({
   //   }),
   //   isDeleted: Joi.boolean()
   })
+    
+});
 
 // Joi schema for Student
 const updateAdminValidationSchema = Joi.object({
