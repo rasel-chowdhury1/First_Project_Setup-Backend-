@@ -1,6 +1,7 @@
 // const express = require('express')
 import express, { Application, Request, Response } from 'express';
 const app: Application = express();
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 // import { StudentRouter } from './app/modules/student/student.router';
 // import { UserRouter } from './app/modules/user/user.router';
@@ -11,7 +12,8 @@ import router from './app/routes';
 
 //parsers
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: ["http://localhost:5173/"]}));
+app.use(cookieParser())
 
 //application routers
 // app.use('/api/v1/students', StudentRouter);
