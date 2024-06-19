@@ -106,7 +106,7 @@ const CreateStudentValidationSchema = Joi.object({
   // password: Joi.string().required().messages({
   //   'any.required': 'password is required',
   // }),
-  password: Joi.string(),
+  password: Joi.string().optional(),
   student: Joi.object({
     name: userNameValidationSchema.required().messages({
       'any.required': 'Name is required',
@@ -147,7 +147,7 @@ const CreateStudentValidationSchema = Joi.object({
     localGuardian: localGuardianValidationSchema.optional(),
     academicDepartment: Joi.string(),
     admissionSemister: Joi.string(),
-    profileImg: Joi.string().optional(),
+    // profileImg: Joi.string().optional(),
     // isActive: Joi.string()
     //   .valid('active', 'inactive')
     //   .default('active')

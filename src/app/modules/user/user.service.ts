@@ -13,8 +13,12 @@ import { Admin } from "../admin/admin.model";
 import { AcademicDepartmentModel } from "../academicDepartment/academicDepartment.model";
 import { Faculty } from "../faculty/faculty.model";
 import { TFaculty } from "../faculty/faculty.interface";
+import { verifyToken } from "../auth/auth.utils";
+import { JwtPayload } from "jsonwebtoken";
+import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 
-const createStudentIntoDB = async (password: string, studentData: Student) => {
+
+const createStudentIntoDB = async (file: Record<string,unknown>, password: string, studentData: Student) => {
 
     // create a user object
     // const user: TnewUser = {}
@@ -60,6 +64,13 @@ const createStudentIntoDB = async (password: string, studentData: Student) => {
 
     //create a user and function return a result (transaction-1)
     // const newUser = await UserModel.create(userData); // using built in static method of mongoose
+    
+    const ImageName = `${userData.id}${studentData?.name?.firstName}`;
+    const path = file?.path as string;
+    //send image to cloudinary
+    const uploadDetails = await sendImageToCloudinary(ImageName, path);
+
+    console.log({uploadDetails})
 
     //when using transaction then pass data as array [] return array [] data otherwise pass object {} return object{}
     const newUser = await UserModel.create([userData], {session})
@@ -71,6 +82,7 @@ const createStudentIntoDB = async (password: string, studentData: Student) => {
         // set id, _id as user
         studentData.id = newUser[0].id;
         studentData.user = newUser[0]._id;
+        studentData.profileImg = uploadDetails?.secure_url;
 
         // const newStudent = await StudentModel.create(studentData)
         //create a student using transaction-2
@@ -90,6 +102,7 @@ const createStudentIntoDB = async (password: string, studentData: Student) => {
     } catch (error) {
       await session.abortTransaction();
       await session.endSession();
+      console.log({error})
       throw new Error('Failed to create this student');
     }
 
@@ -200,9 +213,38 @@ const createStudentIntoDB = async (password: string, studentData: Student) => {
     }
   };
 
+  const changeStatusIntoDB = async (id: string, payload: {status: string}) => {
+     
+    const result = await UserModel.findByIdAndUpdate(id, payload, {new: true});
+    
+    return result;
+  }
+
+  const getMeFromDB = async (payload: JwtPayload) => {
+
+    const {userId, role} = payload;
+
+    let result = null;
+
+    if(role === 'student'){
+      result = await StudentModel.findOne({id: userId});
+    }
+    else if(role === 'faculty'){
+      result = await Faculty.findOne({id: userId})
+    }
+    else if(role === 'admin'){
+      result = await Admin.findOne({id: userId});
+    }
+
+    return result
+  }
+
   
   export const userServices = {
     createStudentIntoDB,
     createFacultyIntoDB,
-    createAdminIntoDB
+    createAdminIntoDB,
+    changeStatusIntoDB,
+    getMeFromDB,
+
   }
