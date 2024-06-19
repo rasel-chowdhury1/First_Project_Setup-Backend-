@@ -8,4 +8,15 @@ const userValidationSchema = Joi.object({
     
 })
 
-export default userValidationSchema;
+const changeStatusValidationSchema = Joi.object({
+    status: Joi.string()
+               .valid('in-progress' , 'blocked')
+               .messages({
+                'any.only': '{#label} is not a valid status',
+              }),
+})
+
+export const UserValidation = {
+    userValidationSchema,
+    changeStatusValidationSchema
+};

@@ -43,6 +43,10 @@ const loginUser = async (payload: TLoginUser) => {
 
     console.log({isPasswordMatch})
 
+    if(!isPasswordMatch){
+        throw new AppError(httpStatus.FORBIDDEN, "Password does not match!!!")
+    }
+
     //Access Granted: Send AccessToken, RefreshToke
      
     const jwtPayload = {
@@ -225,10 +229,49 @@ const forgetPassword = async (id: string) => {
   return resetUILink
 }
 
-const resetPassword = async(payload: Record<string,unknown>) => {
-    const {id,newPassword} = payload
+const resetPassword = async(payload: Record<string,unknown>, token: string) => {
+    const {id,newPassword} = payload;
+
+    //checking if the user is exist
+   const user = await UserModel.findOne({id});
+
+   if (!user) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
+  }
+  // checking if the user is already deleted
+  const isDeleted = user?.isDeleted;
+
+  if (isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted !');
+  }
+
+  // checking if the user is blocked
+  const userStatus = user?.status;
+  
+  if (userStatus === 'blocked') {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked ! !');
+  }
+
+    // checking if the given token is valid
+    const decoded = jwt.verify(
+        token,
+        config.jwt_access_secret as string,
+      ) as JwtPayload;
+    
+      const { userId } = decoded;
+
+      if(id != userId){
+        throw new AppError(httpStatus.FORBIDDEN, "You are forbidden!!!")
+      }
+      
+    //hash new password
+    const newHashedPassword = await bcrypt.hash(
+        newPassword as string,
+        Number(config.bcrypt_sold_rounds)
+    )
+
     const result = await UserModel.findOneAndUpdate({id:id},
-     {password: newPassword},
+     {password: newHashedPassword},
      {new: true}
     )
 

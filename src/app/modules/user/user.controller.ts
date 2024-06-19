@@ -7,6 +7,8 @@ import catchAsync from "../../utils/catchAsync";
 const createStudent = async (req: Request, res: Response) => {
     try {
       
+      // console.log('student file -> ',req.file);
+      // console.log('student data -> ',req.body);
       //recive request body data using destructure
       const {password, student: studentData} = req.body;
   
@@ -15,7 +17,7 @@ const createStudent = async (req: Request, res: Response) => {
       // //will call service funtion to sent this data
       // const result = await StudentServices.createStudentIntoDB(value);
       
-      const result = await userServices.createStudentIntoDB(password, studentData);
+      const result = await userServices.createStudentIntoDB(req.file, password, studentData);
       
   
     //  if(error){
@@ -79,10 +81,38 @@ const createStudent = async (req: Request, res: Response) => {
     });
   });
 
+  const getMe = catchAsync (async (req,res) => {
+
+      const result = await userServices.getMeFromDB(req.user);
+
+      sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: `Student retrive successfully...`,
+        data: result
+      })
+  })
+
+  const changeStatus = catchAsync(async (req, res) => {
+   const {id} = req.params;
+
+   const result = await userServices.changeStatusIntoDB(id, req.body);
+
+   sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Status updated successfully!",
+    data: result
+   })
+
+  })
+
 
   export const userController = {
     createStudent,
     createFaculty,
-    createAdmin
+    createAdmin,
+    getMe,
+    changeStatus
   }
   
