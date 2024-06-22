@@ -8,6 +8,7 @@ import auth from "../../middelwares/auth";
 import { USER_ROLE } from "./user.constrant";
 import { UserValidation } from "./user.validation";
 import { upload } from "../../utils/sendImageToCloudinary";
+import { FacultyValidations } from "../faculty/faculty.validationJoi";
 
 const router = express.Router();
 
@@ -26,7 +27,7 @@ router.post(
 router.post(
     '/create-faculty',
     auth(USER_ROLE.admin),
-    validateRequest(createFacultyValidationSchema),
+    validateRequest(FacultyValidations.createFacultyValidationSchema),
     userController.createFaculty,
   );
   
