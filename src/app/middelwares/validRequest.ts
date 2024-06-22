@@ -5,11 +5,11 @@ const validateRequest = (schema: any) => {
 
     return async (req: Request, res: Response, next: NextFunction) => {
 
-        
+        console.log(req.body)
         //validation using joi
         const {error, value} = await schema.validate(req.body);
 
-        console.log({error, value})
+        console.log("error show from validate request -> ",{error, value})
         
         if(error){
             res.status(404).json({

@@ -10,6 +10,7 @@ import { CourseRoutes } from "../modules/course/course.router";
 import { SemisterRegistrationRouter } from "../modules/semisterRegistration/semisterRegistrantion.router";
 import { OfferedCourseRouter } from "../modules/offeredCourse/offeredCourse.router";
 import { AuthRouter } from "../modules/auth/auth.router";
+import { EnrolledCourseRouter } from "../modules/enrolledCourse/enrolledCourse.router";
 
 const router = express.Router()
 
@@ -61,6 +62,7 @@ router.use('/courses', CourseRoutes);
 router.use('/semister-registration', SemisterRegistrationRouter);
 router.use('/offered-course', OfferedCourseRouter);
 router.use('/auth', AuthRouter);
+router.use('/enrolled-course', EnrolledCourseRouter)
 
 
 export default router;
