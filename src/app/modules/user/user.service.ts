@@ -119,6 +119,9 @@ const createStudentIntoDB = async (file: Record<string,unknown>, password: strin
     //set student role
     userData.role = 'faculty';
     userData.email = payload.email;
+
+    
+
   
     // find academic department info
     const academicDepartment = await AcademicDepartmentModel.findById(
@@ -182,7 +185,8 @@ const createStudentIntoDB = async (file: Record<string,unknown>, password: strin
     try {
       session.startTransaction();
       //set  generated id
-      userData.id = await generateAdminId();
+      // userData.id = await generateAdminId();
+      userData.id = "A-0002"
   
       // create a user (transaction-1)
       const newUser = await UserModel.create([userData], { session }); 

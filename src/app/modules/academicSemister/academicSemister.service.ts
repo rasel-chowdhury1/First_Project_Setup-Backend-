@@ -15,8 +15,10 @@ const createAcademicSemisterIntoDB = async (data: TacademicSemister) => {
     return result;
 }
 
-const getAllAcademicSemisterFromDB = async () => {
-    const result = await AcademicSemisterModel.find()
+const getAllAcademicSemisterFromDB = async (query: object) => {
+    console.log({query})
+    const result = await AcademicSemisterModel.find(query)
+    console.log({result})
     return result
 }
 

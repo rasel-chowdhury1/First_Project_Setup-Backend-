@@ -23,10 +23,19 @@ const auth = (...requiredRules: TUserRole[]) => {
         }
 
         //check if the token is valid
-        const decoded = jwt.verify(
-            token,
-            config.jwt_access_secret as string
-        ) as JwtPayload;
+        let decoded
+        try {
+          decoded = jwt.verify(
+                token,
+                config.jwt_access_secret as string
+            ) as JwtPayload;
+
+            console.log({decoded})
+
+        } catch (error) {
+            console.log({error})
+            throw new AppError(httpStatus.UNAUTHORIZED, "UnAuthorized")
+        }
 
         //decoded
         console.log({decoded});

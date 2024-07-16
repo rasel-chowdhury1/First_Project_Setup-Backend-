@@ -57,7 +57,7 @@ const loginUser = async (payload: TLoginUser) => {
     const accessToken = jwt.sign(
         jwtPayload,
         config.jwt_access_secret as string,
-        {expiresIn: '1d'}
+        {expiresIn: '5s'}
     )
 
     const refreshToken = jwt.sign(
